@@ -21,27 +21,27 @@ class BankServiceTest {
     @Test
     void registerCustomer() {
         Customer customer = bankService.registerCustomer(100d);
-        assertThat(customer.getId() == 0 && customer.getBalance() == 100.00);
+        assertThat(customer.getId() == 0 && customer.getBalance() == 100.00).isTrue();
     }
 
     @Test
     void transfer() {
         Customer customer = bankService.registerCustomer(200d);
         Transaction transaction = bankService.transfer(0, 100d);
-        assertThat(transaction.getStatus() == TransactionStatus.ACCEPTED && transaction.getBalance() == 100d);
+        assertThat(transaction.getStatus() == TransactionStatus.ACCEPTED && transaction.getBalance() == 100d).isTrue();
     }
 
     @Test
     void payment() {
         Customer customer = bankService.registerCustomer(200d);
         Transaction transaction = bankService.payment(0, 100d);
-        assertThat(transaction.getStatus() == TransactionStatus.ACCEPTED && transaction.getBalance() == 300d);
+        assertThat(transaction.getStatus() == TransactionStatus.ACCEPTED && transaction.getBalance() == 300d).isTrue();
     }
 
     @Test
     void getCustomerInfo() {
         Customer customer = bankService.registerCustomer(200d);
         Customer customer1 = bankService.getCustomerInfo(0);
-        assertThat(customer1.equals(customer));
+        assertThat(customer1.equals(customer)).isTrue();
     }
 }
