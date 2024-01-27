@@ -26,15 +26,24 @@ public class BankService {
     public Transaction transfer(int id, double amount) {
         Optional<Customer> customer = this.customerStorage.findCustomer(id);
         if (customer.isEmpty()) {
-            return new Transaction(TransactionStatus.DECLINED, "Klient nie jest zarejestrowany!");
+            return missingCustomerStatus();
         }
         double currentBalance = customer.get().getBalance();
+        Transaction transaction;
         if (currentBalance < amount) {
-            return new Transaction(TransactionStatus.DECLINED, "Brak środków!");
+            return insufficientFundsStatus();
         }
         customer.get().setBalance(currentBalance-amount);
-        return new Transaction(TransactionStatus.ACCEPTED, customer.get().getBalance());
+        transaction = new Transaction(TransactionStatus.ACCEPTED, customer.get().getBalance());
+        customer.get().addTransaction(transaction);
+        return transaction;
     }
 
+    private Transaction missingCustomerStatus() {
+        return new Transaction(TransactionStatus.DECLINED, "Klient nie jest zarejestrowany!");
+    }
 
+    private Transaction insufficientFundsStatus() {
+        return new Transaction(TransactionStatus.DECLINED, "Brak środków!");
+    }
 }
