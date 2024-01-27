@@ -2,7 +2,11 @@ package org.pjwstk.s27149bank.Services;
 
 import org.pjwstk.s27149bank.Customer;
 import org.pjwstk.s27149bank.Storage.CustomerStorage;
+import org.pjwstk.s27149bank.Transaction;
+import org.pjwstk.s27149bank.TransactionStatus;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @Service
 public class BankService {
@@ -17,6 +21,19 @@ public class BankService {
         Customer customer = new Customer(customerId, balance);
         this.customerStorage.add(customer);
         return customer;
+    }
+
+    public Transaction transfer(int id, double amount) {
+        Optional<Customer> customer = this.customerStorage.findCustomer(id);
+        if (customer.isEmpty()) {
+            return new Transaction(TransactionStatus.DECLINED, "Klient nie jest zarejestrowany!");
+        }
+        double currentBalance = customer.get().getBalance();
+        if (currentBalance < amount) {
+            return new Transaction(TransactionStatus.DECLINED, "Brak środków!");
+        }
+        customer.get().setBalance(currentBalance-amount);
+        return new Transaction(TransactionStatus.ACCEPTED, customer.get().getBalance());
     }
 
 
