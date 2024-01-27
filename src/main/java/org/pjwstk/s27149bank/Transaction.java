@@ -10,10 +10,17 @@ public class Transaction {
         this.balance = balance;
     }
 
+    public Transaction(TransactionStatus status, double balance, String error) {
+        this.status = status;
+        this.balance = balance;
+        this.error = error;
+    }
+
     public Transaction(TransactionStatus status, String error) {
         this.status = status;
         this.error = error;
     }
+
     public TransactionStatus getStatus() {
         return status;
     }

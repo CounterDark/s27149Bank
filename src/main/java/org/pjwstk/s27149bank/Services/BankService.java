@@ -30,7 +30,7 @@ public class BankService {
         }
         double currentBalance = customer.get().getBalance();
         if (currentBalance < amount) {
-            return insufficientFundsStatus();
+            return insufficientFundsStatus(customer.get().getBalance());
         }
         customer.get().setBalance(currentBalance-amount);
         Transaction transaction = new Transaction(TransactionStatus.ACCEPTED, customer.get().getBalance());
@@ -54,7 +54,7 @@ public class BankService {
         return new Transaction(TransactionStatus.DECLINED, "Klient nie jest zarejestrowany!");
     }
 
-    private Transaction insufficientFundsStatus() {
-        return new Transaction(TransactionStatus.DECLINED, "Brak środków!");
+    private Transaction insufficientFundsStatus(double currentBalance) {
+        return new Transaction(TransactionStatus.DECLINED, currentBalance, "Brak środków!");
     }
 }
