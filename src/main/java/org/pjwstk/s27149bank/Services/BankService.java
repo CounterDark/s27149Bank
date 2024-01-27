@@ -50,6 +50,14 @@ public class BankService {
         return transaction;
     }
 
+    public Customer getCustomerInfo(int id) {
+        Optional<Customer> customer = this.customerStorage.findCustomer(id);
+        if(customer.isEmpty()) {
+            return null;
+        }
+        return customer.get();
+    }
+
     private Transaction missingCustomerStatus() {
         return new Transaction(TransactionStatus.DECLINED, "Klient nie jest zarejestrowany!");
     }
