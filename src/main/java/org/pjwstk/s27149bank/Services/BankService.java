@@ -29,12 +29,23 @@ public class BankService {
             return missingCustomerStatus();
         }
         double currentBalance = customer.get().getBalance();
-        Transaction transaction;
         if (currentBalance < amount) {
             return insufficientFundsStatus();
         }
         customer.get().setBalance(currentBalance-amount);
-        transaction = new Transaction(TransactionStatus.ACCEPTED, customer.get().getBalance());
+        Transaction transaction = new Transaction(TransactionStatus.ACCEPTED, customer.get().getBalance());
+        customer.get().addTransaction(transaction);
+        return transaction;
+    }
+
+    public Transaction payment(int id, double amount) {
+        Optional<Customer> customer = this.customerStorage.findCustomer(id);
+        if (customer.isEmpty()) {
+            return missingCustomerStatus();
+        }
+        double currentBalance = customer.get().getBalance();
+        customer.get().setBalance(currentBalance+amount);
+        Transaction transaction = new Transaction(TransactionStatus.ACCEPTED, customer.get().getBalance());
         customer.get().addTransaction(transaction);
         return transaction;
     }
